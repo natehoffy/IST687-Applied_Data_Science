@@ -1,0 +1,60 @@
+#STEP 1: Create a function (named readStates) to read a CSV file into R
+#read in the census data set
+readStates <- function(){
+  #read the data from the web
+  urlToRead <- "http://www2.census.gov/programs-surveys/popest/tables/2010-2011/state/totals/nst-est2011-01.csv"
+  df <- read.csv(url(urlToRead))
+  
+  #STEP 2: Clean the dataframe
+  #remove the first 8 rows ('header information')
+  df <- df[-1:-8,]
+  #only keep the first 5 columns
+  df <- df[,1:5]
+  #rename the first column
+  df$stateName <- df[,1]
+  df <- df[,-1]
+  #remove the last rows (tail info)
+  df<-df[-52:-58,]
+  #remove the ‘dot’ from the state name
+  df$stateName <- gsub("\\.","",df$stateName)
+  #convert the columns to actual numbers and rename
+  # Numberize() - Gets rid of commas and other junk and
+  # converts to numbers
+  # Assumes that the inputVector is a list of data that
+  # can be treated as character strings
+  Numberize <- function(inputVector)
+  {
+    # Get rid of commas
+    inputVector<-gsub(",","", inputVector)
+    # Get rid of spaces
+    inputVector<-gsub(" ","", inputVector)
+    
+    return(as.numeric(inputVector))
+  }
+  df$Jul2010 <- Numberize(df$X)
+  df$Jul2011 <- Numberize(df$X.1)
+  df$base2010 <- Numberize(df$X.2)
+  df$base2011 <- Numberize(df$X.3)
+  df <- df[,-1:-4]
+  #remove the old rownames, which are now confusing
+  rownames(df) <- NULL
+  
+  return(df)
+}
+
+#STEP 3: Store and Explore the dataset
+#Store		the dataset	into	a	dataframe,	called	dfStates.
+dfStates <- readStates()
+#Test	your	dataframe	by	calculating	the	mean	for	the	July2011	data
+mean(dfStates$Jul2011)
+
+#STEP 4: Find the state with the Highest Population
+#Function to return state w/ highest population from Jul2011 column and only return that row
+maxPopJul2011 <- function(){
+  index <- which.max(dfStates$Jul2011)
+  state <- dfStates[index,]
+  return(state)
+}
+maxPopJul2011()
+#Sort the data, in increasing order, by 2011 data
+dfStates[order(dfStates$Jul2011),]
