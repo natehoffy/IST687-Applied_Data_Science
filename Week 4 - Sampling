@@ -2,6 +2,107 @@
 # Week 4 - Sampling
 ###################
 
+# Use sample(), to draw a random sample from a data set with just a single call
+# Reference Week 3 Homework file to read in data for dfStates
+# First argument is data source, second is size of sample 
+# Replace=TRUE means that as you draw out one value you immediately chuck it back so it could get drawn again
+# Replace=TRUE is most commonly used by statisticians
+
+sample(dfStates$Jul2010, size=8, replace=TRUE)
+
+# Calculate a mean of the sample
+
+mean(sample(dfStates$Jul2010, size=16, replace=TRUE))
+
+# Use replicate() to repeat sampling -- because we care about the long haul!
+# Take nested function from above, insert into replicate as second argument (first is num of reps) 
+# Set simplify TRUE to return results as a vector
+
+replicate(4,mean(sample(dfStates$Jul2010, size=16, replace=TRUE)), simplify=TRUE)
+
+# Ramp up to 500 replications, and nest in another if so we can get mean of all our sample means
+
+mean(replicate(500,mean(sample(dfStates$Jul2010, size=16, replace=TRUE)), simplify=TRUE))
+
+# Ramp up to 5000 samples, summarize means with a histogram
+
+hist(replicate(5000,mean(sample(dfStates$Jul2010, size=16, replace=TRUE)), simplify=TRUE))
+
+# Save a distribution of sample means so we can work with  a fixed set of numbers
+
+SampleMeans <- replicate(10000,mean(sample(dfStates$Jul2010, size=5, replace=TRUE)), simplify=TRUE)
+
+# Check length to ensure our SampleMeans vector has 10000 means in it
+
+length(SampleMeans)
+
+# Mean of the means in SampleMeans (should be somewhat close to the mean of your population)
+
+mean(SampleMeans)
+
+# Run a histogram on SampleMeans and check the distribution
+
+hist(SampleMeans)
+
+# Summarize your vector SampleMeans
+
+summary(SampleMeans)
+
+# Quantile can show us similar information for the quant buckets of our dist
+# One reason to use quantile() is that it lets us control exactly where we make the cuts. 
+# To get quartiles, we cut at 25% (0.25 in the command just below), at 50%, and at 75% 
+
+quantile(SampleMeans, probs=c(.25,.5,.75))
+
+# But what if we wanted instead to cut at 2.5% and 97.5%? Easy to do with quantile():
+# Shows only 2.5% chance mean below .025 val or above .975 val if we were to draw another sample
+
+quantile(SampleMeans, probs=c(.025,.975))
+
+# Create a random vector of population values from some random area within the U.S.
+
+MysterySample <- c(3706690, 159358, 106405, 55519, 53883)
+
+# Find the mean of MysterySample
+
+mean(MysterySample)
+
+# Why is MysterySample mean so low - it is out of the quantile bounds at the 2.5% level
+# Make quantile of sampling more stringent to see if it fits there
+
+quantile(SampleMeans, probs=c(0.005,0.995))
+
+# MysterySample is still out of the bounds at even 0.5% level
+# From this can infer that MysterySample is therefore not a subset of states (not a sample of states data we work with)
+# Looking up in book, we learn yes --> MysterySample is data from 5 territories not included in dfStates
+# The important thing to take away is that the characteristics of this group of data points, notably the mean, 
+    # was sufficiently different from a known distribution of means that we could make an inference that the sample was
+    # not drawn from the original population of data.
+
+# Using standard deviation, let's quantify the spread of the distribution of SampleMeans
+
+sd(SampleMeans)
+
+# Shortcut w/out replicating samples is to take sd of the original data and divide it by the square root of the sample size
+
+sd(dfStates$Jul2010)/sqrt(5)
+
+# Cut two standard errors from themean
+
+StdError <- sd(dfStates$Jul2010)/sqrt(5)
+CutPoint975 <- mean(dfStates$Jul2010) + (2 * StdError)
+CutPoint975
+
+
+
+
+
+
+
+
+
+
+
 
 
 
