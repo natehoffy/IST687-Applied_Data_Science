@@ -58,3 +58,17 @@ maxPopJul2011 <- function(){
 maxPopJul2011()
 #Sort the data, in increasing order, by 2011 data
 dfStates[order(dfStates$Jul2011),]
+
+#Step 5: Explore the distribution of the states
+#function - two parameter w/ vector and number
+myFunction<-function(myVector,a){
+  b <- length(myVector)
+  myVector <- which(myVector < a)
+  length(myVector)/b
+  return(length(myVector)/b)
+}
+#test the function with small nums so we know it works
+z = c(1,2,3,4,5)
+myFunction(z,2)
+#run function on our states data
+myFunction(dfStates$Jul2011,mean(dfStates$Jul2011))
