@@ -93,9 +93,106 @@ StdError <- sd(dfStates$Jul2010)/sqrt(5)
 CutPoint975 <- mean(dfStates$Jul2010) + (2 * StdError)
 CutPoint975
 
+# Create a variable called jar, think of 1 as blue bean and 0 as red bean
 
+jar <- c(1,0)
 
+# Create a variable called numSamples which is how many times we want to sample the jar
 
+numSamples <- 4
+
+# Sample the jar
+
+sample(jar,numSamples,replace=TRUE)
+
+# If we use replace equals false with numSamples = 4, we get error due to sample being larger than population w/ no replace
+
+sample(jar,numSamples,replace=FALSE)
+
+# Will work w/ replace=FALSE for 1 sample
+
+sample(jar,1,replace=FALSE)
+
+# Sample with 2 and replace=FALSE
+
+sample(jar,2,replace=FALSE)
+
+# Go back to true and numSamples -> can do different operations on sample like sum
+
+sum(sample(jar,numSamples,replace=TRUE))
+
+# Try the mean operation on the sample
+
+mean(sample(jar,numSamples,replace=TRUE))
+
+# Go back to simple sample code, and let's replicate the sample so we can repeat multiple times
+
+replicate(5,sample(jar,numSamples,replace=TRUE),simplify=TRUE)
+
+# Return the means of the sampels as a single vector, whereas the above was more of a dataframe
+
+replicate(2,mean(sample(jar,numSamples,replace=TRUE)),simplify=TRUE)
+
+# create a variable called sampleMeans2 to house the sampleMeans we get from replication above
+
+sampleMeans2 <- replicate(10,mean(sample(jar,numSamples,replace=TRUE)),simplify=TRUE)
+
+# Take the mean of the sampleMeans2 again
+
+mean(sampleMeans2)
+
+# Take the sd to find the spread
+
+sd(sampleMeans2)
+
+# Write the code for creating a jar variable with -1, 0, and 1. 
+# Then sample that jar variable 250 times 
+# Then get the mean of those samples.
+
+jar2 <- c(-1,0,1)
+sample(jar2,250,replace=TRUE)
+mean(sample(jar,250,replace=TRUE))
+
+# More on sampling
+
+samples <- rnorm(10000,50,2)
+mean(samples) # should hover right around 50
+sd(samples) # should hover right around 2
+hist(samples) # looks v normal w/ minimal skew and kurtosis
+
+# Let's look at yet another distribution
+
+testData <- c(19.09,19.55,17.89,17.73,25.15,27.27,25.24,21.05,21.65,20.92,22.61,15.71,22.04,22.60,24.25)
+hist(testData) # will see some skew and kurtosis
+mean(testData)
+
+# install moments package so we can look at how skewed the dist testData is
+
+install.packages("moments")
+library(moments) # use it
+
+skewness(testData) #will show slight negative given skewness we saw
+
+# playing around with dfStates distribution from week 3
+# display structure
+
+str(dfStates)
+
+# take the mean of one of the columns
+
+mean(dfStates$base2010)
+
+# do some sampling on it
+
+sample(dfStates$base2010,size=16,replace=TRUE)
+
+# take the mean of the sample
+
+mean(sample(dfStates$base2010,size=16,replace=TRUE))
+
+# increase the sample size and run it some more -- bigger size n, closer to true pop mean will be: CLT
+
+mean(sample(dfStates$base2010,size=160,replace=TRUE))
 
 
 
