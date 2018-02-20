@@ -1,5 +1,0 @@
-############################
-# Load sample dataset into R
-############################
-
-load("/Users/nathanielhoffelmeyer/Desktop/IST 687/nps_subset.RData")
